@@ -114,12 +114,12 @@ function Square(props){
         const current = history[history.length - 1];
         const squares = current.squares.slice();
         var nbSquares =calculateNeigbours(squares);
-        var liveCells = calculateLiveCells(nbSquares);
+    //    var liveCells = calculateLiveCells(nbSquares);
         //set livecells
         var ml =  42;
         this.setState({
             history: history.concat([{
-                squares: liveCells,
+                squares: nbSquares,
                 movelocation: ml,
               }]),
             stepNumber: history.length,
@@ -183,7 +183,7 @@ function Square(props){
     rowlength-1, rowlength, rowlength+1];
     var nb = 0;
     for(let i=0 ; i < neigPositions.length ; i++){
-      if(squares[currenti][neigPositions[i]]){
+      if(squares[currenti + neigPositions[i]]){
         nb++;
       }
     }
@@ -191,12 +191,17 @@ function Square(props){
   }
 
   function calculateNeigbours( cellSquares){
-    return cellSquares;
+    var nbSquares = cellSquares.slice();
+    for (let i = 0; i < nbSquares.length; i++) {
+       var nb = GetNeighboursNrI(i);
+      nbSquares[i] = ( (nb >=3 && nb < 5 ) ?
+                        1 :
+                        0);
+    }
+    return nbSquares;
   }
 
-  function calculateLiveCells( cellSquares){
-    return cellSquares;
-  }
+
   function calculateWinner(squares) {
     const lines = [
       [0, 1, 2],
